@@ -20,6 +20,7 @@
     h1 {
       font-size: 36px;
       margin-bottom: 40px;
+      text-align: center;
     }
 
     .buttons {
@@ -49,21 +50,34 @@
     }
 
     #no {
-  position: fixed;
-  background: #555;
-  color: white;
-  transform: scale(1) !important;
-  z-index: 2;
-  left: 20px; /* initial fallback */
-  top: 90px;
-}
-
+      position: fixed;
+      background: #555;
+      color: white;
+      transform: scale(1) !important;
+      z-index: 2;
+      left: 20px;
+      top: 90px;
+    }
 
     #message {
       display: none;
       font-size: 28px;
       margin-top: 40px;
       text-align: center;
+    }
+
+    #gallery {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #gallery img {
+      width: 200px;
+      height: auto;
+      margin: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .heart {
@@ -95,11 +109,14 @@
     Of course I knew you would say yes 😌❤️
   </div>
 
+  <div id="gallery"></div>
+
   <script>
     const yesBtn = document.getElementById("yes");
     const noBtn = document.getElementById("no");
     const message = document.getElementById("message");
     const buttons = document.getElementById("buttons");
+    const gallery = document.getElementById("gallery");
 
     let yesScale = 1;
 
@@ -110,6 +127,7 @@
       buttons.style.display = "none";
       message.style.display = "block";
       startHearts();
+      showPictures();
     });
 
     // GLOBAL cursor tracking
@@ -125,14 +143,14 @@
       // Danger zone: 160px
       if (distance < 160) {
         moveNoToCorner();
-        growYesSlowly();
+        growYesFaster();
       }
     });
 
     // Mobile safety
     document.addEventListener("touchstart", () => {
       moveNoToCorner();
-      growYesSlowly();
+      growYesFaster();
     });
 
     function moveNoToCorner() {
@@ -155,10 +173,10 @@
       noBtn.style.top = spot.y + "px";
     }
 
-    function growYesSlowly() {
-  yesScale += 0.36; // faster growth
-  yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
-}
+    function growYesFaster() {
+      yesScale += 0.05; // faster continuous growth
+      yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
+    }
 
     function startHearts() {
       const interval = setInterval(() => {
@@ -178,13 +196,23 @@
 
       setTimeout(() => heart.remove(), 3000);
     }
+
+    function showPictures() {
+      gallery.style.display = "block";
+
+      // Add your picture URLs here
+      const images = [
+        "images/photo1.jpg",
+        "images/photo2.jpg",
+        "images/photo3.jpg"
+      ];
+
+      images.forEach(src => {
+        const img = document.createElement("img");
+        img.src = src;
+        gallery.appendChild(img);
+      });
+    }
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
