@@ -23,8 +23,8 @@
 
     .buttons {
       position: relative;
-      width: 360px;
-      height: 180px;
+      width: 400px;
+      height: 200px;
     }
 
     button {
@@ -34,23 +34,25 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: left 0.12s ease, top 0.12s ease;
     }
 
     #yes {
-      left: 20px;
-      top: 70px;
+      left: 30px;
+      top: 80px;
       background: #ff4d6d;
       color: white;
       z-index: 1;
+      transition: transform 0.2s ease;
     }
 
     #no {
-      right: 20px;
-      top: 70px;
+      right: 30px;
+      top: 80px;
       background: #555;
       color: white;
       z-index: 2;
+      transition: left 0.15s ease, top 0.15s ease;
+      transform: scale(1); /* HARD LOCK */
     }
 
     #message {
@@ -99,6 +101,8 @@
     const buttons = document.getElementById("buttons");
     const message = document.getElementById("message");
 
+    let yesScale = 1;
+
     yesBtn.addEventListener("click", () => {
       buttons.style.display = "none";
       message.style.display = "block";
@@ -117,34 +121,43 @@
       const dy = e.clientY - cy;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // If cursor is close → jump far
-      if (distance < 140) {
+      if (distance < 150) {
         jumpNoButton(dx, dy);
+        growYesSlowly();
       }
     }
 
     function evadeTouch(e) {
       e.preventDefault();
       jumpNoButton(
-        Math.random() * 300 - 150,
-        Math.random() * 150 - 75
+        Math.random() * 400 - 200,
+        Math.random() * 200 - 100
       );
+      growYesSlowly();
     }
 
     function jumpNoButton(dx, dy) {
       const container = buttons.getBoundingClientRect();
       const btn = noBtn.getBoundingClientRect();
 
-      // Move OPPOSITE direction, large jump
-      let newX = noBtn.offsetLeft - dx * 1.8;
-      let newY = noBtn.offsetTop - dy * 1.8;
+      // Force scale reset (extra safety)
+      noBtn.style.transform = "scale(1)";
 
-      // Clamp inside container
+      let newX = noBtn.offsetLeft - dx * 2.2;
+      let newY = noBtn.offsetTop - dy * 2.2;
+
       newX = Math.max(0, Math.min(container.width - btn.width, newX));
       newY = Math.max(0, Math.min(container.height - btn.height, newY));
 
       noBtn.style.left = newX + "px";
       noBtn.style.top = newY + "px";
+    }
+
+    function growYesSlowly() {
+      if (yesScale < 1.35) {
+        yesScale += 0.01; // SLOW growth
+        yesBtn.style.transform = `scale(${yesScale})`;
+      }
     }
 
     function startHearts() {
