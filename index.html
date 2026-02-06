@@ -49,11 +49,15 @@
     }
 
     #no {
-      background: #555;
-      color: white;
-      transform: scale(1) !important;
-      z-index: 2;
-    }
+  position: fixed;
+  background: #555;
+  color: white;
+  transform: scale(1) !important;
+  z-index: 2;
+  left: 20px; /* initial fallback */
+  top: 90px;
+}
+
 
     #message {
       display: none;
@@ -179,5 +183,6 @@
   </script>
 </body>
 </html>
+
 
 
