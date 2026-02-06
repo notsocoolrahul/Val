@@ -156,11 +156,9 @@
     }
 
     function growYesSlowly() {
-      if (yesScale < 3) {
-        yesScale += 0.23;
-        yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
-      }
-    }
+  yesScale += 0.36; // faster growth
+  yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
+}
 
     function startHearts() {
       const interval = setInterval(() => {
@@ -183,6 +181,7 @@
   </script>
 </body>
 </html>
+
 
 
 
