@@ -1,186 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Be My Valentine 💘</title>
-<style>
-body {
-  margin: 0;
-  height: 100vh;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+  <meta charset="UTF-8" />
+  <title>Be My Valentine 💘</title>
 
-h1 {
-  font-size: 36px;
-  margin-bottom: 40px;
-}
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-.buttons {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-}
+    h1 {
+      font-size: 36px;
+      margin-bottom: 40px;
+    }
 
-button {
-  position: absolute;
-  padding: 14px 34px;
-  font-size: 18px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  user-select: none;
-}
+    .buttons {
+      position: relative;
+      width: 100%;
+      height: 300px;
+    }
 
-#yes {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: #ff4d6d;
-  color: white;
-  transition: transform 0.25s ease;
-  z-index: 1;
-}
+    button {
+      position: absolute;
+      padding: 14px 34px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
 
-#no {
-  /* Start next to Yes */
-  left: calc(50% + 140px);
-  top: 50%;
-  transform: translateY(-50%) scale(1) !important;
+    #yes {
+      left: 50%;
+      top: 140px;
+      transform: translateX(-50%);
+      background: #ff4d6d;
+      color: white;
+      transition: transform 0.25s ease;
+      z-index: 1;
+    }
+
+    #no {
+  position: fixed;
   background: #555;
   color: white;
+  transform: scale(1) !important;
   z-index: 2;
+  left: 20px; /* initial fallback */
+  top: 90px;
 }
 
-#message {
-  display: none;
-  font-size: 28px;
-  margin-top: 40px;
-  text-align: center;
-}
 
-.heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 24px;
-  animation: floatUp 3s ease-out forwards;
-  pointer-events: none;
-}
+    #message {
+      display: none;
+      font-size: 28px;
+      margin-top: 40px;
+      text-align: center;
+    }
 
-@keyframes floatUp {
-  to {
-    transform: translateY(-320px) scale(1.4);
-    opacity: 0;
-  }
-}
-</style>
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 24px;
+      animation: floatUp 3s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      to {
+        transform: translateY(-320px) scale(1.4);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <h1>Will you be my Valentine? 💘</h1> 
 
-<h1>Will you be my Valentine? 💘</h1>
+  <div class="buttons" id="buttons">
+    <button id="yes">Yes 💖</button>
+    <button id="no">No 💔</button>
+  </div>
 
-<div class="buttons" id="buttons">
-  <button id="yes">Yes 💖</button>
-  <button id="no">No 💔</button>
-</div>
+  <div id="message">
+    Of course I knew you would say yes 😌❤️
+  </div>
 
-<div id="message">
-  Of course I knew you would say yes 😌❤️
-</div>
+  <script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const message = document.getElementById("message");
+    const buttons = document.getElementById("buttons");
 
-<script>
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-const message = document.getElementById("message");
+    let yesScale = 1;
 
-let yesScale = 1;
-
-// Start normal
-let chaotic = false;
-
-yesBtn.addEventListener("click", () => {
-  document.getElementById("buttons").style.display = "none";
-  message.style.display = "block";
-  startHearts();
-});
-
-// GLOBAL cursor tracking
-document.addEventListener("mousemove", (e) => {
-  const rect = noBtn.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
-
-  const dx = e.clientX - cx;
-  const dy = e.clientY - cy;
-  const distance = Math.sqrt(dx*dx + dy*dy);
-
-  if (distance < 150) {
-    chaotic = true; // start chaotic corner movement
+    // Initial random corner placement
     moveNoToCorner();
-    growYesSlowly();
-  }
-});
 
-// Mobile safety
-document.addEventListener("touchstart", () => {
-  chaotic = true;
-  moveNoToCorner();
-  growYesSlowly();
-});
+    yesBtn.addEventListener("click", () => {
+      buttons.style.display = "none";
+      message.style.display = "block";
+      startHearts();
+    });
 
-function moveNoToCorner() {
-  const padding = 20;
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  const bw = noBtn.offsetWidth;
-  const bh = noBtn.offsetHeight;
+    // GLOBAL cursor tracking
+    document.addEventListener("mousemove", (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
 
-  if (!chaotic) return; // stay next to Yes at first
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-  // 4 corners
-  const corners = [
-    {x: padding, y: padding},
-    {x: w - bw - padding, y: padding},
-    {x: padding, y: h - bh - padding},
-    {x: w - bw - padding, y: h - bh - padding}
-  ];
+      // Danger zone: 160px
+      if (distance < 160) {
+        moveNoToCorner();
+        growYesSlowly();
+      }
+    });
 
-  const spot = corners[Math.floor(Math.random() * corners.length)];
+    // Mobile safety
+    document.addEventListener("touchstart", () => {
+      moveNoToCorner();
+      growYesSlowly();
+    });
 
-  noBtn.style.left = spot.x + "px";
-  noBtn.style.top = spot.y + "px";
-}
+    function moveNoToCorner() {
+      const padding = 20;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const bw = noBtn.offsetWidth;
+      const bh = noBtn.offsetHeight;
 
-function growYesSlowly() {
-  if (yesScale < 1.4) {
-    yesScale += 0.01;
-    yesBtn.style.transform = `translate(-50%, -50%) scale(${yesScale})`;
-  }
-}
+      const corners = [
+        { x: padding, y: padding },
+        { x: w - bw - padding, y: padding },
+        { x: padding, y: h - bh - padding },
+        { x: w - bw - padding, y: h - bh - padding }
+      ];
 
-function startHearts() {
-  const interval = setInterval(() => {
-    for (let i = 0; i < 6; i++) createHeart();
-  }, 250);
+      const spot = corners[Math.floor(Math.random() * corners.length)];
 
-  setTimeout(() => clearInterval(interval), 3000);
-}
+      noBtn.style.left = spot.x + "px";
+      noBtn.style.top = spot.y + "px";
+    }
 
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.textContent = "❤️";
-  heart.style.left = Math.random() * window.innerWidth + "px";
-  heart.style.fontSize = 20 + Math.random() * 25 + "px";
-  document.body.appendChild(heart);
+    function growYesSlowly() {
+      if (yesScale < 1.4) {
+        yesScale += 0.01;
+        yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
+      }
+    }
 
-  setTimeout(() => heart.remove(), 3000);
-}
-</script>
+    function startHearts() {
+      const interval = setInterval(() => {
+        for (let i = 0; i < 6; i++) createHeart();
+      }, 250);
+
+      setTimeout(() => clearInterval(interval), 3000);
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.fontSize = 20 + Math.random() * 25 + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 3000);
+    }
+  </script>
 </body>
 </html>
+
+
